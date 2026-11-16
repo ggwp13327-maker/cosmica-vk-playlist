@@ -1,7 +1,7 @@
 {
   "playlistUrl": "https://vkvideo.ru/playlist/-172786855_2",
-  "total": 5,
-  "updatedAt": "2026-11-16T12:19:30.908Z",
+  "total": 6,
+  "updatedAt": "2026-11-16T12:22:42.361Z",
   "source": "public-playlist-parser",
   "videos": [
     {
@@ -48,6 +48,15 @@
       "poster": "https://sun9-63.vkuserphoto.ru/s/v1/ig2/B62NGpgh76Piaeugq41HuI8DAFOIsCGXA4gGscKerrctwbkOXPOh06QN5gcUDFuQ_xsM6YJuf80RiFo74L34Xsiy.jpg?quality=95&size=1280x720",
       "embedUrl": "https://vkvideo.ru/video_ext.php?oid=-172786855&id=456242566&hash=bbd8c5ff72acc5a8",
       "url": "https://vkvideo.ru/video-172786855_456242566"
+    },
+    {
+      "id": 456242574,
+      "ownerId": -172786855,
+      "title": "Венера, выпускница курса «Эксперт полевых структур»",
+      "duration": 204,
+      "poster": "https://sun9-63.vkuserphoto.ru/impg/vgYsCFSanHyQfgvO28NNkQtqpGYjpO6RLYJMWQ/0_suNVeDwyI.jpg?size=130x96&quality=95&keep_aspect_ratio=1&background=000000&sign=aad5b1104c6b844f30f40fd9cf537a2a&c_uniq_tag=hGv1AM8wJafYwP_DO9eY5cAbKyZ0qNP5dW3QOH2Kc_g&type=video_thumb",
+      "embedUrl": "https://vk.ru/video_ext.php?oid=-172786855&id=456242574&hash=0aedffaa6e6eba94",
+      "url": "https://vkvideo.ru/video-172786855_456242574"
     }
   ]
 }
