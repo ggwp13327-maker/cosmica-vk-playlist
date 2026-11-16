@@ -18,6 +18,13 @@ test('Only playlist videos enter the feed; cover duplicates are ignored; public 
 test('Partial embed data cannot silently remove a newly added video',()=>{
  assert.throws(()=>normalizePlaylist([card(1),card(2)],metadata([1])),/EMBED_METADATA_MISSING/);
 });
+test('A public video added from another owner remains part of the playlist',()=>{
+ const otherOwner=123456, id=9;
+ const item={...card(id),url:`https://vkvideo.ru/video${otherOwner}_${id}`};
+ const details={...detail(id),owner_id:otherOwner,player:`https://vk.ru/video_ext.php?oid=${otherOwner}&id=${id}&hash=abcd`};
+ const feed=normalizePlaylist([item],new Map([[`${otherOwner}_${id}`,details]]));
+ assert.equal(feed.total,1);assert.equal(feed.videos[0].ownerId,otherOwner);
+});
 test('Wrong hosts and mismatching video identities cannot become iframe URLs',()=>{
  assert.equal(safePlayer(`https://example.com/video_ext.php?oid=${OWNER}&id=1`,OWNER,1),null);
  assert.equal(safePlayer(`https://vkvideo.ru/video_ext.php?oid=${OWNER}&id=2`,OWNER,1),null);

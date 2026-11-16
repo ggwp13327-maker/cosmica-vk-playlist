@@ -26,7 +26,7 @@ async function attempt() {
         if (Number.isInteger(result.count) && result.count >= 0) expected = result.count;
         for (const item of result.items) {
           const v = item.video || item;
-          if (Number(v.owner_id) !== OWNER || !Number.isInteger(v.id)) continue;
+          if (!Number.isInteger(v.owner_id) || !Number.isInteger(v.id)) continue;
           metadata.set(`${v.owner_id}_${v.id}`, {id:v.id, owner_id:v.owner_id, title:v.title, duration:v.duration, image:v.image, player:v.player, can_embed:v.can_embed, is_private:v.is_private});
         }
       }).catch(() => {}).finally(() => pending.delete(promise));

@@ -25,7 +25,8 @@ export function normalizePlaylist(cards, metadata, now = new Date().toISOString(
   for (const card of cards) {
     const match = /\/video(-?\d+)_(\d+)(?:[/?#]|$)/.exec(card.url || '');
     // The page also renders a playlist-cover card linking to its first video.
-    if (!match || !card.duration || Number(match[1]) !== OWNER) continue;
+    if (!match || !card.duration) continue;
+    try {if(new URL(card.url).hostname!=='vkvideo.ru')continue;}catch{continue;}
     const ownerId = Number(match[1]), id = Number(match[2]), key = `${ownerId}_${id}`;
     if (seen.has(key)) continue;
     seen.add(key);
