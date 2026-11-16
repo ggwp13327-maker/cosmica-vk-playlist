@@ -4,6 +4,7 @@ Automatically reads https://vkvideo.ru/playlist/-172786855_2 in an anonymous bro
 
 - No VK login, personal session cookie or user API token.
 - No video-file download; videos remain in VK's embedded player.
+- The owner requested retaining the separate Venus testimonial already present on the website. `additional-videos.json` contains its public ID and existing caption. Its public player link is refreshed with the open `video.getOembed` method; if it later enters the playlist it is deduplicated automatically.
 - Only public titles, thumbnails, durations, video IDs and player links are saved.
 - Secrets, original site source, Tilda credentials and user documents are not part of this repository.
 - Standard public Ubuntu runners are used; no paid hosting or larger runners.

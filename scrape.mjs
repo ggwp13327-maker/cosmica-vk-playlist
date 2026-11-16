@@ -1,7 +1,7 @@
 import {createRequire} from 'node:module';
-import {writeFile} from 'node:fs/promises';
+import {readFile,writeFile} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
-import {PLAYLIST, OWNER, normalizePlaylist} from './normalize.mjs';
+import {PLAYLIST, OWNER, normalizePlaylist,safePlayer} from './normalize.mjs';
 const require = createRequire(import.meta.url);
 
 async function attempt() {
@@ -55,7 +55,27 @@ async function attempt() {
 export async function scrapePlaylist() {
   let last;
   for (let n=0;n<2;n++) {
-    try {return await attempt();} catch (error) {last=error;if(n===0)await new Promise(r=>setTimeout(r,1800));}
+    try {
+      const feed=await attempt();
+      // Preserve the existing separately added testimonial, explicitly requested
+      // by the owner. oEmbed is a public/open method and needs no VK token.
+      let extra=[];
+      try {extra=JSON.parse(await readFile(new URL('./additional-videos.json',import.meta.url),'utf8'));} catch(error) {if(error.code!=='ENOENT')throw error;}
+      for(const video of extra) {
+        if(feed.videos.some(v=>v.id===video.id&&v.ownerId===video.ownerId))continue;
+        if(video.ownerId!==OWNER||!Number.isInteger(video.id))throw Error('INVALID_ADDITIONAL_VIDEO');
+        const url=new URL('https://api.vk.ru/method/video.getOembed');url.searchParams.set('url',`https://vkvideo.ru/video${OWNER}_${video.id}`);url.searchParams.set('v','5.199');
+        const response=await fetch(url,{signal:AbortSignal.timeout(15000)});
+        if(!response.ok)throw Error('ADDITIONAL_VIDEO_UNAVAILABLE');
+        const data=(await response.json()).response;
+        const source=/\bsrc=["']([^"']+)["']/i.exec(data?.html||'')?.[1]?.replace(/&amp;/g,'&');
+        const embedUrl=safePlayer(source,OWNER,video.id);
+        if(!embedUrl)throw Error('ADDITIONAL_EMBED_MISSING');
+        feed.videos.push({id:video.id,ownerId:OWNER,title:video.title,duration:video.duration,poster:typeof data.thumbnail_url==='string'&&data.thumbnail_url.startsWith('https://')?data.thumbnail_url:'',embedUrl,url:`https://vkvideo.ru/video${OWNER}_${video.id}`});
+      }
+      feed.total=feed.videos.length;
+      return feed;
+    } catch (error) {last=error;if(n===0)await new Promise(r=>setTimeout(r,1800));}
   }
   throw last;
 }
