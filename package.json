@@ -1,0 +1,16 @@
+{
+  "name": "cosmica-vk-playlist-parser",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "scrape": "node scrape.mjs public/playlist.json",
+    "test": "node --test test.mjs"
+  },
+  "dependencies": {
+    "playwright": "1.62.1"
+  }
+}

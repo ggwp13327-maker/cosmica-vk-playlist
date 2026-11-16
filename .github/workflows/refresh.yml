@@ -1,0 +1,46 @@
+name: Refresh public VK playlist
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23,53 * * * *'
+  push:
+    paths:
+      - '*.mjs'
+      - 'package*.json'
+      - '.github/workflows/refresh.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-public-playlist
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: Install parser
+        run: npm ci --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Verify update handling
+        run: npm test
+      - name: Read public playlist
+        run: node scrape.mjs public/playlist.next.json
+      - name: Publish successful result
+        run: |
+          mv public/playlist.next.json public/playlist.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/playlist.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Refresh public VK playlist'
+          git push
