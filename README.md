@@ -9,7 +9,7 @@ Automatically reads https://vkvideo.ru/playlist/-172786855_2 in an anonymous bro
 - Secrets, original site source, Tilda credentials and user documents are not part of this repository.
 - Standard public Ubuntu runners are used; no paid hosting or larger runners.
 
-The workflow requests an update at minutes 23 and 53 each hour. GitHub can delay or skip scheduled runs. Failed refreshes preserve the last committed feed. A successful refresh commits its actual verification time and complete result.
+The workflow requests an update every 10 minutes, at minutes 7, 17, 27, 37, 47 and 57 each hour. GitHub can delay or skip scheduled runs, so this is a requested cadence rather than a maximum delivery delay. Manual workflow_dispatch can request an immediate refresh when needed. Failed refreshes preserve the last committed feed. A successful refresh commits its actual verification time and complete result.
 
 `npm ci`, `npx playwright install --with-deps chromium`, `npm test`, then `npm run scrape` to run locally. Node 22+.
 
